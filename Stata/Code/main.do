@@ -10,18 +10,18 @@
 	display "`c(username)'" 	//Check username and copy to set project globals by user
 	
 	* Add file paths to DataWork folder and the Github folder for RRF2024
-	if "`c(username)'" == "" {
-        *global onedrive "???/DataWork"
-		global github 	"???/GitHub-rrf-24"
+	if "`c(username)'" == "David" {
+        global onedrive "C:\Users\David\OneDrive\Desktop\Transparent and Credible Analystics\DataWork"
+		global github 	"C:\Github\rrf25-dag"
     }
 	
 	
 	* Set globals for sub-folders 
-	global data 	"${onedrive}/Data"
-	global code 	"${github}/Stata/Code"
-	global outputs 	"${github}/Stata/Outputs"
+	global data 	"${onedrive}\Data"
+	global code 	"${github}\Stata\Code"
+	global outputs 	"${github}\Stata\Outputs"
 	
-	sysdir set PLUS "???"
+	sysdir set PLUS "${code}\ado"
 
 
 	* Install packages 
