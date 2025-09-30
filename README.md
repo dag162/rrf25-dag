@@ -7,7 +7,7 @@ Welcome to the DIME Analytics training on GitHub and reproducible workflows. Ove
 
 This repository will serve as your workspace throughout the entire training. Follow the steps outlined below to set up your environment. Once set up, you will continue to work on this repository for the remainder of the sessions.
 
-I am learning how to use the Gitflow cycle
+Now checking what happens if I make further changes
 
 ## Project Overview
 
