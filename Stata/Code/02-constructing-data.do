@@ -122,6 +122,7 @@ ssc install winsor
 *------------------------------------------------------------------------------- 	
 	use "${data}/Intermediate/TZA_amenity_tidy.dta", clear
 	
+	
 	// Exercise 4.2: Data construction: Secondary data ----
 		// Instructions:
 			// Calculate the total number of medical facilities by summing relevant columns.
