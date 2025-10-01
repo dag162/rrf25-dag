@@ -79,26 +79,27 @@ ssc install winsor
 				// 3. Average sick days.
 				// 4. Total treatment cost in USD.
 	use "${data}/Intermediate/TZA_CCT_HH_mem.dta", clear
-	collapse 	(sum) ??? ///
-				(max) ??? ///
-				(mean) m_cost = ??? ???, by(???)
+	collapse 	(sum) treat_cost ///
+				(max) read sick ///
+				(mean) m_cost = treat_cost days_sick, by(hhid)
 				
-	replace treat_cost = ??? if mi(???)	
+	replace treat_cost = m_cost if mi(m_cost)	
 	
 				//Cost in USD
-	gen ??? = ??? * ???
+	gen treat_cost_usd = treat_cost * $usd
 
 				// Add labels	
 				
-	lab var ??? 		???
-	lab var ??? 		???
-	lab var ??? 		???
-	lab var ??? 		???
+	lab var read 		"Any member can read/write"
+	lab var sick 		"Any member was sick in the last 4 days"
+	lab var days_sick 			"Average sick days"
+	lab var treat_cost_usd 		"Total cost of treatment (USD)"
 	
-	drop ??? ??? 
+	drop treat_cost m_cost 
 
 				// Save tempfile  
-	
+	tempfile mem 
+	save 	`mem'
 	
 *-------------------------------------------------------------------------------	
 * Data construction: merge all hh datasets
@@ -108,14 +109,14 @@ ssc install winsor
 	// Exercise 5: Merge HH and HH-member data ----
 		// Instructions:
 			// Merge the household-level data with the HH-member level indicators.
-	merge ??? ??? using ???, assert(3) nogen 
+	merge 1:1 hhid using `mem', assert(3) nogen 
 			
 			// Merge hh and member data with the treatment data, ensure the treatment status is included in the final dataset.
- 	merge ??? ??? using ???, assert(3) nogen 
+ 	merge m:1 vid using "${data}/Raw/treat_status.dta", assert(3) nogen 
 
 	
 			//Save data
-
+	save "${data}/Final/TZA_CCT_analysis.dta", replace
 *-------------------------------------------------------------------------------	
 * Data construction: Secondary data
 *------------------------------------------------------------------------------- 	
@@ -126,8 +127,8 @@ ssc install winsor
 			// Calculate the total number of medical facilities by summing relevant columns.
 			// Apply appropriate labels to the new variables created.
 			
-	egen ??? = ???(??? ???)
-	lab var ??? ???
+	egen n_medical = rowtotal(n_clinic n_hospital)
+	lab var n_medical "No. of medical facilities"
 	
 	// Exercise 6: Save final dataset ----
 		// Instructions:
