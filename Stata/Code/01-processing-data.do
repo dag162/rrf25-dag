@@ -162,28 +162,26 @@
 * Tidy Data: Secondary data
 *------------------------------------------------------------------------------- 	
 	
-	* Import secondary data 
-	???
+	import delimited "${data}/Raw/TZA_amenity.csv", clear
 	
-	* reshape  
-	reshape ???
+	* reshape wide 
+	reshape wide n , i(adm2_en) j(amenity) str
 	
 	* rename for clarity
-	rename ???
+	rename n* n_*
 	
-	* Fix data types
-	encode ???
+	encode adm2_en , gen(district) 
 	
-	* Label all vars 
+	* Label vars 
 	lab var district "District"
-	???
-	???
-	???
+	lab var n_school "No. of schools"
+	lab var n_clinic "No. of clinics"
+	lab var n_hospital "No. of hospitals"
 	
 	* Save
-	keeporder ???
+	keeporder district n_*
 	
-	save "${data}/Intermediate/???.dta", replace
+	save "${data}/Intermediate/TZA_amenity_tidy.dta", replace
 
 	
 ****************************************************************************end!

@@ -23,48 +23,49 @@
 				// otherwise multiplied by value of hectare in acres
 			// 2. USD conversion factor.
 	
-		global acre_conv ???
+		global acre_conv 2.47
 	
 	di $acre_conv
 	
-	generate 	area_acre = ??? 				if ??? == 1 , after(ar_farm)
-	replace 	area_acre = ??? * $acre_conv 	if ??? == 2
+	generate 	area_acre = ar_farm 				if ar_unit == 1 , after(ar_farm)
+	replace 	area_acre = ar_farm * $acre_conv 	if ar_unit == 2
 	
-	lab var		area_acre ???
+	lab var		area_acre "Area farmed in acres"
 	
 	* Consumption in usd
-	global usd ???
+	global usd 0.00037
 	
-	foreach cons_var in ??? ??? {
+	foreach cons_var in food_cons nonfood_cons {
 		
 		* Save labels 
 		local `cons_var'_lab: variable label `cons_var'
 		
 		* generate vars
-		gen `cons_var'_usd = ??? * ??? , after(???)
+		gen `cons_var'_usd = `cons_var' * $usd , after(`cons_var')
 		
 		* apply labels to new variables
-		lab var `cons_var'_usd ???
+		lab var `cons_var'_usd "``cons_var'_lab'(USD)"
 		
 	}
 	
 	// Exercise 3: Handle outliers ----
 		// you can use custom Winsorization function to handle outliers.
-
-	local winvars ??? ??? ???
+ssc install winsor
+	local winvars area_acre food_cons_usd nonfood_cons_usd
 	
 	foreach win_var of local winvars {
 		
 		local `win_var'_lab: variable label `win_var'
 		
-		winsor 	`win_var', p(???) high gen(`win_var'_w)
+		winsor 	`win_var', p(0.05) high gen(`win_var'_w)
 		order 	`win_var'_w, after(`win_var')
 		lab var `win_var'_w "``win_var'_lab' (Winsorized 0.05)"
 		
 	}
 	
 	//Save tempfile	
-	
+	tempfile	 hh
+	save 		`hh'
 	
 *-------------------------------------------------------------------------------	
 * Data construction: HH - mem
