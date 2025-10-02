@@ -17,6 +17,12 @@
     }
 	
 	
+	* Add file paths to DataWork folder and the Github folder for RRF2024
+	if "`c(username)'" == "" {
+        global onedrive ""
+		global github 	""
+    }
+	
 	* Set globals for sub-folders 
 	global data 	"${onedrive}\Data"
 	global code 	"${github}\Stata\Code"
