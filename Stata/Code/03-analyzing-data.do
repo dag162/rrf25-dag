@@ -4,16 +4,16 @@
 *------------------------------------------------------------------------------- 
 	
 	*load analysis data 
-	
+	use "${data}/Final/TZA_CCT_analysis.dta", clear
 	
 *-------------------------------------------------------------------------------	
 * Exploratory Analysis
 *------------------------------------------------------------------------------- 
 	
 	* Area over treatment by districts 
-	gr bar 	???, ///
-			over(???) ///
-			by(???)
+	gr bar 	area_acre_w, ///
+			over(treatment) ///
+			by(district)
 
 *-------------------------------------------------------------------------------	
 * Final Analysis
@@ -21,26 +21,41 @@
 
 
 	* Bar graph by treatment for all districts 
-	gr bar 	???, ///
-			over(??) ///
-			by(	????) ///
-			????
+	gr bar 	area_acre_w, ///
+			over(treatment) ///
+			asy ///
+			by(district, rows(1) ///
+			title("Area cultivated by treatment") legend(pos(6)) note(" ")) ///
+			legend(row(1) order(0 "Assignment:" 1 "Control" 2 "Treatment")) ///
+			ytitle("Average area cultivated - acres") ///
+			blabel(total, format(%9.1f)) ///
+			subtitle(,pos(6) bcolor(none)) 
 			
-	gr export "$outputs/fig1.png", replace	
+		gr export "$outputs/fig1.png", replace	
 	
 	* Distribution of non food consumption by female headed hhs with means
 
-
-	twoway	(kdensity ???, color(???)) ///
-			(kdensity ???, color(???)) ///
+	forvalues  hh_head = 0/1 {
+		sum nonfood_cons_usd_w if female_head == `hh_head'
+		
+		local mean_`hh_head' = round(r(mean), 0.1)
+		
+	} 
+	
+	
+	
+	twoway	(kdensity nonfood_cons_usd_w if female == 1, color(navy)) ///
+			(kdensity nonfood_cons_usd_w if female == 0, color(dkorange)) ///
 			, ///
-			xline(???, lcolor(???) 	lpattern(???)) ///
-			xline(???, lcolor(???) 	lpattern(???)) ///
-			leg(order(0 "Household Head:" 1 "???" 2 "???" ) row(???) pos(???)) ///
-			xtitle("???") ///
-			ytitle("???") ///
-			title("???") ///
-			note("???")
+			xline(`mean_1', lcolor(navy) 	lpattern(dash)) ///
+			xline(`mean_0', lcolor(dkorange) 	lpattern(dash)) ///
+			xlabel(`mean_1', add) ///
+			leg(order(0 "Household Head:" 1 "Female" 2 "Male" ) row(1) pos(6)) ///
+			xtitle("Non-food consumption") ///
+			ytitle("Density") ///
+			title("Distribution of non-food consumption across household heads") 
+			///
+			note("Dash lines represents the mean by gender of household head")
 			
 	gr export "$outputs/fig2.png", replace	
 	
