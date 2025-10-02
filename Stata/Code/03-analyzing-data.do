@@ -53,8 +53,7 @@
 			leg(order(0 "Household Head:" 1 "Female" 2 "Male" ) row(1) pos(6)) ///
 			xtitle("Non-food consumption") ///
 			ytitle("Density") ///
-			title("Distribution of non-food consumption across household heads") 
-			///
+			title("Distribution of non-food consumption across household heads") ///
 			note("Dash lines represents the mean by gender of household head")
 			
 	gr export "$outputs/fig2.png", replace	
