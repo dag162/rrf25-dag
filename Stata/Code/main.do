@@ -3,7 +3,8 @@
 *******************************************************************************/
 
 	* Set version
-	version 18
+	clear all
+	version 18.5
 
 	* Set project global(s)	
 	// User: you 
